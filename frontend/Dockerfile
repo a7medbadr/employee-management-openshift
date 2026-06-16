@@ -1,22 +1,26 @@
 # Build stage
-FROM node:20 AS builder
+#FROM node:20 AS builder
 
-WORKDIR /app
+#WORKDIR /app
 
-COPY package*.json ./
+#COPY package*.json ./
 
-RUN npm install
+#RUN npm install
 
-COPY . .
+#COPY . .
 
-RUN npm run build
+#RUN npm run build
 
 
 # Runtime stage
 FROM nginx:latest
 
+COPY build/ /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/build /usr/share/nginx/html
+
+RUN chmod -R 755 /usr/share/nginx/html && \
+    chgrp -R 0 /usr/share/nginx/html && \
+    chmod -R g=u /usr/share/nginx/html
 
 EXPOSE 8080
 
