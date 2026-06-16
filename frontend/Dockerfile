@@ -1,8 +1,7 @@
-FROM nginx:latest
+FROM openshift/nginx:latest
 
-COPY build/ /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-RUN chmod -R g+rX /usr/share/nginx/html
+COPY build/ /opt/app-root/src/
 
 EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
