@@ -1,8 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from config import DATABASE_URI
 
 app = Flask(__name__)
+
+CORS(app)
 
 # Database Configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
@@ -11,7 +14,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-# Employee Model
 class Employee(db.Model):
     __tablename__ = "employees"
 
@@ -25,21 +27,22 @@ class Employee(db.Model):
     joining_date = db.Column(db.Date)
 
 
-# Home Route
 @app.route("/")
 def home():
     return jsonify({
-        "message": "Employee Management API Running"
+        "message": "Employee Management API Running",
+        "version": "v2"
     })
 
-# health
+
 @app.route("/health")
 def health():
     return {
-        "status": "UP"
+        "status": "UP",
+        "version": "v2"
     }
 
-# Get All Employees
+
 @app.route("/employees", methods=["GET"])
 def get_employees():
 
@@ -48,6 +51,7 @@ def get_employees():
     result = []
 
     for emp in employees:
+
         result.append({
             "id": emp.id,
             "employee_id": emp.employee_id,
@@ -62,16 +66,13 @@ def get_employees():
     return jsonify(result)
 
 
-# Get Employee By ID
 @app.route("/employees/<int:id>", methods=["GET"])
 def get_employee(id):
 
     employee = Employee.query.get(id)
 
     if not employee:
-        return jsonify({
-            "error": "Employee not found"
-        }), 404
+        return jsonify({"error": "Employee not found"}), 404
 
     return jsonify({
         "id": employee.id,
@@ -85,7 +86,6 @@ def get_employee(id):
     })
 
 
-# Add Employee
 @app.route("/employees", methods=["POST"])
 def add_employee():
 
@@ -104,55 +104,43 @@ def add_employee():
     db.session.add(employee)
     db.session.commit()
 
-    return jsonify({
-        "message": "Employee created successfully"
-    }), 201
+    return jsonify({"message":"Employee created successfully"}),201
 
 
-# Update Employee
 @app.route("/employees/<int:id>", methods=["PUT"])
 def update_employee(id):
 
     employee = Employee.query.get(id)
 
     if not employee:
-        return jsonify({
-            "error": "Employee not found"
-        }), 404
+        return jsonify({"error":"Employee not found"}),404
 
-    data = request.get_json()
+    data=request.get_json()
 
-    employee.name = data["name"]
-    employee.email = data["email"]
-    employee.department = data["department"]
-    employee.position = data["position"]
-    employee.salary = data["salary"]
+    employee.name=data["name"]
+    employee.email=data["email"]
+    employee.department=data["department"]
+    employee.position=data["position"]
+    employee.salary=data["salary"]
 
     db.session.commit()
 
-    return jsonify({
-        "message": "Employee updated successfully"
-    })
+    return jsonify({"message":"Employee updated successfully"})
 
 
-# Delete Employee
 @app.route("/employees/<int:id>", methods=["DELETE"])
 def delete_employee(id):
 
-    employee = Employee.query.get(id)
+    employee=Employee.query.get(id)
 
     if not employee:
-        return jsonify({
-            "error": "Employee not found"
-        }), 404
+        return jsonify({"error":"Employee not found"}),404
 
     db.session.delete(employee)
     db.session.commit()
 
-    return jsonify({
-        "message": "Employee deleted successfully"
-    })
+    return jsonify({"message":"Employee deleted successfully"})
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0",port=5000)

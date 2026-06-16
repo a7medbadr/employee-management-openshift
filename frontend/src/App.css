@@ -1,0 +1,73 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+body {
+  margin: 0;
+  padding: 0;
+  /* لون خلفية غامق ومريح جداً للعين (أفضل من الأسود الصريح) */
+  background-color: #121212; 
+  font-family: Arial, sans-serif;
+  
+  /* لون النص الأساسي (رمادي فاتح عشان ميعملش زغللة للعين) */
+  color: #e0e0e0; 
+}
+
+/* الكروت أو الحاويات (Containers) داخل الصفحة */
+.card, .container {
+  background-color: #1e1e1e; /* درجة رمادي أفتح سنة عشان تفصل عن الخلفية الأساسية */
+  border: 1px solid #2d2d2d; /* إطار خفيف جداً يحدد العناصر */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* ضل ناعم بيدي عمق للتصميم */
+}
+
+/* العناوين الرئيسية */
+h1, h2, h3 {
+  color: #ffffff; /* أبيض صريح للعناوين عشان تظهر بوضوح */
+}
+
+/* الروابط */
+a {
+  color: #bb86fc; /* لون موف هادي مناسب جداً للـ Dark Mode */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #03dac6; /* لون مميز عند التمرير بالماوس */
+}

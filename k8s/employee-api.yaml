@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "4"
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"employee-api:latest","namespace":"a-badr-dev"},"fieldPath":"spec.template.spec.containers[?(@.name==\"employee-api\")].image"}]'
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2026-06-15T14:47:24Z"
+  generation: 4
+  labels:
+    app: employee-api
+    app.kubernetes.io/component: employee-api
+    app.kubernetes.io/instance: employee-api
+  name: employee-api
+  namespace: a-badr-dev
+  resourceVersion: "8009949350"
+  uid: dc943691-9633-4745-b9aa-c7d4856a05fc
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      deployment: employee-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      labels:
+        deployment: employee-api
+    spec:
+      containers:
+      - env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: DB_USER
+              name: employee-db-secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: employee-db-secret
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              key: DB_NAME
+              name: employee-db-secret
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DB_HOST
+              name: employee-config
+
+        image: image-registry.openshift-image-registry.svc:5000/a-badr-dev/employee-api@sha256:6d983cdda7814f1f8a0bc7c9caa7c54a21d1f136663b753885c358a5a840fe71
+        imagePullPolicy: IfNotPresent
+        name: employee-api
+
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+
+        # -------------------------
+        # Liveness Probe
+        # -------------------------
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+
+        # -------------------------
+        # Readiness Probe
+        # -------------------------
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+        # -------------------------
+        # Resources (Added)
+        # -------------------------
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        # -------------------------
+
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-06-15T14:47:28Z"
+    lastUpdateTime: "2026-06-15T14:47:28Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2026-06-15T14:47:24Z"
+    lastUpdateTime: "2026-06-15T14:56:20Z"
+    message: ReplicaSet "employee-api-64668c87cd" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 4
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
