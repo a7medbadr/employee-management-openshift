@@ -159,7 +159,7 @@ function App() {
 
       <ToastContainer position="top-right" />
 
-      <h1>Employee Management System</h1>
+      <h1>Employee Management System v2</h1>
 
       <h2>{editMode ? "Update Employee" : "Add Employee"}</h2>
 
