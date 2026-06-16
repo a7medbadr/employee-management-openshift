@@ -31,7 +31,7 @@ class Employee(db.Model):
 def home():
     return jsonify({
         "message": "Employee Management API Running",
-        "version": "v2"
+        "version": "v3"
     })
 
 
@@ -39,7 +39,7 @@ def home():
 def health():
     return {
         "status": "UP",
-        "version": "v2"
+        "version": "v3"
     }
 
 
