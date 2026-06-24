@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: employee-route-crc
+  namespace: a-badr-dev
+  labels:
+    app: employee-api-crc
+spec:
+  to:
+    kind: Service
+    name: employee-service-crc
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None
