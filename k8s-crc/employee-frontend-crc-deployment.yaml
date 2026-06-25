@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-frontend-crc
+  namespace: a-badr-dev
+  labels:
+    app: employee-frontend-crc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-frontend-crc
+  template:
+    metadata:
+      labels:
+        app: employee-frontend-crc
+    spec:
+      containers:
+        - name: employee-frontend
+          image: image-registry.openshift-image-registry.svc:5000/a-badr-dev/employee-frontend-crc:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
