@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: employee-config-crc
+  namespace: a-badr-dev
+data:
+  DB_HOST: employee-postgres-service-crc
+  DB_NAME: employeedb
+  DB_PORT: "5432"
