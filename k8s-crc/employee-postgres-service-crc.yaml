@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-postgres-service-crc
+  namespace: a-badr-dev
+  labels:
+    app: employee-postgres-crc
+spec:
+  type: ClusterIP
+  selector:
+    app: employee-postgres-crc
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
