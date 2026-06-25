@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-postgres-crc
+  namespace: a-badr-dev
+  labels:
+    app: employee-postgres-crc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-postgres-crc
+  template:
+    metadata:
+      labels:
+        app: employee-postgres-crc
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+
+          env:
+            - name: POSTGRES_DB
+              value: employeedb
+            - name: POSTGRES_USER
+              value: employeeuser
+            - name: POSTGRES_PASSWORD
+              value: Employee@123
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: employee-pvc-crc
+
+      restartPolicy: Always
